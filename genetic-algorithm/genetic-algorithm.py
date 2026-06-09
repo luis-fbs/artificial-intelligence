@@ -2,8 +2,18 @@ import math
 import random
 
 
+def bin_to_float(x):
+    min, max, n_bits = -100, 100, 22
+    distance = max - min
+    step = distance / (2 ** n_bits - 1)
+    return min + x * step
+
 def decode_value(value):
-    return value >> 22, ( (1 << 22) -1 ) & value
+    x_bin = value >> 22
+    y_bin = ( (1 << 22) -1 ) & value
+    x = bin_to_float(x_bin)
+    y = bin_to_float(y_bin)
+    return x, y
 
 def fitness(value):
     x, y = decode_value(value)
@@ -93,7 +103,3 @@ def genetic_algorithm(population, fitness_function, n_bits, crossover_rate = 0.8
 
     return best_individual, best_fitness
 
-
-population = [random.randint(-100,100) for _ in range(14)]
-solution, value = genetic_algorithm(population, fitness, 44)
-print(decode_value(solution), value)
