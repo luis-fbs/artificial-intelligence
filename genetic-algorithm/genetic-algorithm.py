@@ -22,18 +22,17 @@ def fitness(value):
 
 def spin_roulette(cumulative_fitness):
     roulette = random.random() * cumulative_fitness[-1]
-    for i, value in enumerate(cumulative_fitness):
+    for index, value in enumerate(cumulative_fitness):
         if value >= roulette: break
-    return i
+    return index
 
 def generate_pair(cumulative_fitness):
-    individual1 = spin_roulette(cumulative_fitness)
-    individual2 = individual1
+    index_individual1 = spin_roulette(cumulative_fitness)
+    index_individual2 = index_individual1
 
-    while individual2 == individual1:
-        individual2 = spin_roulette(cumulative_fitness)
-
-    return (individual1, individual2) if individual1 < individual2 else (individual2, individual1)
+    while index_individual2 == index_individual1:
+        index_individual2 = spin_roulette(cumulative_fitness)
+    return index_individual1, index_individual2
 
 def selection(population, fitness_function):
     best_individual = population[0]
