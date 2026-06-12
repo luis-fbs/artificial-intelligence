@@ -2,24 +2,6 @@ import math
 import random
 
 
-def bin_to_float(x):
-    min, max, n_bits = -100, 100, 22
-    distance = max - min
-    step = distance / (2 ** n_bits - 1)
-    return min + x * step
-
-def decode_value(value):
-    x_bin = value >> 22
-    y_bin = ( (1 << 22) -1 ) & value
-    x = bin_to_float(x_bin)
-    y = bin_to_float(y_bin)
-    return x, y
-
-def fitness(value):
-    x, y = decode_value(value)
-    t = x*x + y*y
-    return 0.5 - (pow(math.sin(math.sqrt(t)), 2)- 0.5) / pow(1+0.001*t, 2)
-
 def spin_roulette(cumulative_fitness):
     roulette = random.random() * cumulative_fitness[-1]
     for index, value in enumerate(cumulative_fitness):
@@ -78,7 +60,7 @@ def mutate(individual, n_bits,rate):
     position = random.randint(0, n_bits-1)
     return individual ^ (1 << position)
 
-def genetic_algorithm(population, fitness_function, n_bits, crossover_rate = 0.80, mutation_rate = 0.1):
+def genetic_algorithm(population, fitness_function, n_bits, crossover_rate = 0.65, mutation_rate = 0.008):
     best_individual, best_fitness = population[0], fitness_function(population[0])
     generations_without_improvement = 0
     while generations_without_improvement < 50:
@@ -100,4 +82,3 @@ def genetic_algorithm(population, fitness_function, n_bits, crossover_rate = 0.8
         population = next_generation
 
     return best_individual, best_fitness
-
