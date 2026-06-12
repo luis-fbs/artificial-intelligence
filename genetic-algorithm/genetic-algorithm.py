@@ -52,9 +52,8 @@ def selection(population, fitness_function):
     population_size = len(population)
     selected_pairs = []
     for _ in range(math.ceil(population_size/2)):
-        pair = generate_pair(cumulative_fitness)
-        while pair in selected_pairs:
-            pair = generate_pair(cumulative_fitness)
+        index_individual1, index_individual2 = generate_pair(cumulative_fitness)
+        pair = (population[index_individual1], population[index_individual2])
         selected_pairs.append(pair)
 
     return selected_pairs, best_individual, best_fitness
@@ -83,11 +82,11 @@ def genetic_algorithm(population, fitness_function, n_bits, crossover_rate = 0.8
     best_individual, best_fitness = population[0], fitness_function(population[0])
     generations_without_improvement = 0
     while generations_without_improvement < 50:
-        selected_pairs, best_selected_individual, best_selected_fitness = selection(population, fitness_function)
+        selected_pairs, population_best_individual, population_best_fitness = selection(population, fitness_function)
 
-        if best_selected_fitness > best_fitness:
-            best_individual = best_selected_individual
-            best_fitness = best_selected_fitness
+        if population_best_fitness > best_fitness:
+            best_individual = population_best_individual
+            best_fitness = population_best_fitness
             generations_without_improvement = 0
         else:
             generations_without_improvement += 1
