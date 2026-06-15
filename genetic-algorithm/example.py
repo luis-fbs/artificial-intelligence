@@ -22,7 +22,16 @@ def fitness(value):
     t = x*x + y*y
     return 0.5 - (pow(math.sin(math.sqrt(t)), 2)- 0.5) / pow(1+0.001*t, 2)
 
+def seeder(population_size, n):
+    seed = []
+    for _ in range(n):
+        population = [random.getrandbits(44) for _ in range(population_size)]
+        i, f = genetic_algorithm(population, fitness, 44)
+        seed.append(i)
+    return seed
 
-population = [random.getrandbits(44) for _ in range(100)]
-i, f = genetic_algorithm(population, fitness, 44)
-print(decode_value(i), f)
+
+n = 500
+population = seeder(100, n)
+best_individual, best_fitness = genetic_algorithm(population, fitness, 44)
+print(decode_value(best_individual), best_fitness)
